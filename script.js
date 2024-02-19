@@ -10,12 +10,16 @@ const GameBoard = (function () {
         }
     };
 
+    const getBoard = function () {
+        return board
+    }
+
     const printBoard = () => {
         console.log(board)
     }
 
 
-    return { board, makeMove, printBoard };
+    return { getBoard, makeMove, printBoard };
 })()
 
 function gameController(playerOne, playerTwo) {
@@ -42,9 +46,10 @@ function gameController(playerOne, playerTwo) {
         } else {
             activePlayer = players[0]
         }
+        console.log(`It is ${activePlayer.name}'s turn.`)
     }
     const getActivePlayer = () => {
-        activePlayer
+
         console.log(`It is ${activePlayer.name}'s turn.`)
     }
 
@@ -53,16 +58,22 @@ function gameController(playerOne, playerTwo) {
     }
 
     const playRound = () => {
-        let tie = False
-        let winner = null
+        let tie = false
+        let winner = false
+        console.log("beginning")
+        console.log(board.getBoard())
 
-        getActivePlayer()
-        printRound()
-        board.makeMove(0, 0, activePlayer)
-        checkForWinner(board.board, activePlayer.piece)
-        checkForTie(board.board)
-        switchPlayerTurn()
-        printRound()
+        for (let i = 0; i <= 5; i++) {
+            //getActivePlayer()
+            printRound()
+            board.makeMove(0, 0, activePlayer)
+            winner = checkForWinner(board.getBoard(), activePlayer.piece)
+            tie = checkForTie(board.getBoard())
+            switchPlayerTurn()
+            board.makeMove(0, 1, activePlayer)
+        }
+
+
     }
 
     const checkForWinner = function (board, piece) {
@@ -80,8 +91,10 @@ function gameController(playerOne, playerTwo) {
             (board[0][2] === piece && board[1][1] === piece && board[2][0] === piece)
         ) {
             console.log("We have a winner");
+            return true
         } else {
             console.log("No winner yet");
+            return false
         }
     }
 
@@ -89,10 +102,12 @@ function gameController(playerOne, playerTwo) {
         for (let i = 0; i < board.length; i++) {
             for (let j = 0; j < board[0].length; j++) {
                 if (board[i][j] === 0) {
-                    return False
+                    console.log("no tie yet")
+                    return false
                 }
             }
         }
+        console.log("we have a tie")
         return True
     }
     return { playRound }
