@@ -4,9 +4,13 @@ const GameBoard = (function () {
     ];
 
     const makeMove = function (row, column, player) {
+        const legalMove = false
 
-        if (board[row][column] === 0) {
-            board[row][column] = player.piece
+        while (legalMove === false) {
+            if (board[row][column] === 0) {
+                board[row][column] = player.piece
+                legalMove = true
+            }
         }
     };
 
@@ -46,11 +50,10 @@ function gameController(playerOne, playerTwo) {
         } else {
             activePlayer = players[0]
         }
-        console.log(`It is ${activePlayer.name}'s turn.`)
     }
     const getActivePlayer = () => {
-
         console.log(`It is ${activePlayer.name}'s turn.`)
+        return activePlayer
     }
 
     const printRound = () => {
@@ -60,11 +63,9 @@ function gameController(playerOne, playerTwo) {
     const playRound = () => {
         let tie = false
         let winner = false
-        console.log("beginning")
-        console.log(board.getBoard())
 
         for (let i = 0; i <= 5; i++) {
-            //getActivePlayer()
+            getActivePlayer()
             printRound()
             board.makeMove(0, 0, activePlayer)
             winner = checkForWinner(board.getBoard(), activePlayer.piece)
@@ -110,9 +111,35 @@ function gameController(playerOne, playerTwo) {
         console.log("we have a tie")
         return True
     }
-    return { playRound }
-
+    return { board, getActivePlayer, playRound }
 }
 
-let game = gameController("Danny1", "Luci2")
-game.playRound()
+function ScreenController() {
+    const game = gameController("Danny1", "Luci2")
+    const playerTurnDiv = document.querySelector('.turn');
+    const boardDiv = document.querySelector('.board');
+
+    const updateScreen = function () {
+        boardDiv.textContent = ""
+
+        const board = game.board.getBoard()
+        const activePlayer = game.getActivePlayer()
+        playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
+
+        for (let i = 0; i < board.length; i++) {
+            const row = document.createElement("div")
+            boardDiv.appendChild(row)
+            for (let j = 0; j < board[i].length; j++) {
+                const square = document.createElement("button")
+                square.dataset.row = i
+                square.dataset.column = j;
+                row.appendChild(square)
+            }
+        }
+
+    }
+
+    updateScreen()
+}
+
+ScreenController()
