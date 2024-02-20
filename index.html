@@ -9,6 +9,12 @@
     </head>
 
     <body>
+        <section>
+            <h1>Tic Tac Toe</h1>
+            <button id="new-game">New Game</button>
+            <button>Reset</button>
+
+        </section>
         <div class="turn"></div>
         <section class="coded-board">
             <div class="row-0">
@@ -32,6 +38,26 @@
         <section class="board">
 
         </section>
+        <dialog id="modal">
+            <form id="form" action="">
+                <h2>Input Player's Name</h2>
+                <div>
+                    <label for="first-player-name"></label>
+                    <input type="text" name="first-player-name" id="first-player-name">
+                </div>
+                <div>
+                    <label for="second-player-name"></label>
+                    <input type="text" name="second-player-name" id="second-player-name">
+                </div>
+                <div>
+                    <button id="confirm" type="submit">Confirm</button>
+                </div>
+                <div>
+                    <button id="cancel">Cancel</button>
+                </div>
+
+            </form>
+        </dialog>
     </body>
 
 </html>

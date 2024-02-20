@@ -115,17 +115,53 @@ function gameController(playerOne, playerTwo) {
 }
 
 function ScreenController() {
-    const game = gameController("Danny1", "Luci2")
+    let firstPlayerName
+    let secondPlayerName
+    let game;
+    const newGameBtn = document.getElementById("new-game")
+    const modal = document.getElementById("modal")
+    const form = document.getElementById("form")
+
+    const cancelBtn = document.getElementById("cancel")
+
     const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
 
+
+    newGameBtn.addEventListener("click", () => {
+        modal.showModal()
+    })
+
+    cancelBtn.addEventListener("click", () => {
+        modal.close()
+    })
+
+    function getNames(event) {
+        event.preventDefault()
+        firstPlayerName = document.getElementById("first-player-name").value
+        secondPlayerName = document.getElementById("second-player-name").value
+        modal.close()
+
+        if (firstPlayerName && secondPlayerName) {
+            game = gameController(firstPlayerName, secondPlayerName);
+            updateScreen(); // Update the screen once the game is created
+        }
+    }
+
+    form.addEventListener("submit", function (event) {
+        getNames(event)
+    })
+
+
+
+
     const updateScreen = function () {
         boardDiv.textContent = ""
-
         const board = game.board.getBoard()
         const activePlayer = game.getActivePlayer()
         playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
 
+        // render the board
         for (let i = 0; i < board.length; i++) {
             const row = document.createElement("div")
             boardDiv.appendChild(row)
@@ -136,10 +172,15 @@ function ScreenController() {
                 row.appendChild(square)
             }
         }
-
     }
 
-    updateScreen()
+    function handleBoardClicks(event) {
+        const clickedSquare = event.target
+        clickedSquare.textContent = game.getActivePlayer().piece
+    }
+    boardDiv.addEventListener("click", handleBoardClicks)
+
+
 }
 
 ScreenController()
