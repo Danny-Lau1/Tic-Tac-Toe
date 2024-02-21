@@ -1,16 +1,16 @@
 const GameBoard = (function () {
     const board = [
-        [0, 0, 0], [0, 0, 0], [0, 0, 0]
+        ['', '', ''], ['', '', ''], ['', '', '']
     ];
 
     const makeMove = function (row, column, player) {
-        const legalMove = false
 
-        while (legalMove === false) {
-            if (board[row][column] === 0) {
-                board[row][column] = player.piece
-                legalMove = true
-            }
+        if (board[row][column] === '') {
+            board[row][column] = player.piece
+            return true
+        }
+        else {
+            return false
         }
     };
 
@@ -34,11 +34,11 @@ function gameController(playerOne, playerTwo) {
     const players = [
         {
             name: playerOneName,
-            piece: 1
+            piece: "X"
         },
         {
             name: playerTwoName,
-            piece: 2
+            piece: "O"
         }
     ]
 
@@ -60,21 +60,25 @@ function gameController(playerOne, playerTwo) {
         board.printBoard()
     }
 
-    const playRound = () => {
+    const playRound = (row, column) => {
         let tie = false
         let winner = false
 
-        for (let i = 0; i <= 5; i++) {
-            getActivePlayer()
-            printRound()
-            board.makeMove(0, 0, activePlayer)
-            winner = checkForWinner(board.getBoard(), activePlayer.piece)
-            tie = checkForTie(board.getBoard())
-            switchPlayerTurn()
-            board.makeMove(0, 1, activePlayer)
+
+        getActivePlayer()
+        printRound()
+
+        let legalMove = board.makeMove(row, column, activePlayer);
+
+        if (!legalMove) {
+            // If the move is not legal, inform the player and return
+            console.log("Please make a legal move");
+            return; // leaves the playRound function
         }
 
-
+        winner = checkForWinner(board.getBoard(), activePlayer.piece)
+        tie = checkForTie(board.getBoard())
+        switchPlayerTurn()
     }
 
     const checkForWinner = function (board, piece) {
@@ -102,14 +106,14 @@ function gameController(playerOne, playerTwo) {
     const checkForTie = function (board) {
         for (let i = 0; i < board.length; i++) {
             for (let j = 0; j < board[0].length; j++) {
-                if (board[i][j] === 0) {
+                if (board[i][j] === '') {
                     console.log("no tie yet")
                     return false
                 }
             }
         }
         console.log("we have a tie")
-        return True
+        return true
     }
     return { board, getActivePlayer, playRound }
 }
@@ -121,9 +125,7 @@ function ScreenController() {
     const newGameBtn = document.getElementById("new-game")
     const modal = document.getElementById("modal")
     const form = document.getElementById("form")
-
     const cancelBtn = document.getElementById("cancel")
-
     const playerTurnDiv = document.querySelector('.turn');
     const boardDiv = document.querySelector('.board');
 
@@ -152,9 +154,6 @@ function ScreenController() {
         getNames(event)
     })
 
-
-
-
     const updateScreen = function () {
         boardDiv.textContent = ""
         const board = game.board.getBoard()
@@ -169,6 +168,7 @@ function ScreenController() {
                 const square = document.createElement("button")
                 square.dataset.row = i
                 square.dataset.column = j;
+                square.textContent = board[i][j]
                 row.appendChild(square)
             }
         }
@@ -176,11 +176,12 @@ function ScreenController() {
 
     function handleBoardClicks(event) {
         const clickedSquare = event.target
-        clickedSquare.textContent = game.getActivePlayer().piece
+        const row = clickedSquare.dataset.row
+        const column = clickedSquare.dataset.column
+        game.playRound(row, column)
+        updateScreen()
     }
     boardDiv.addEventListener("click", handleBoardClicks)
-
-
 }
 
 ScreenController()
