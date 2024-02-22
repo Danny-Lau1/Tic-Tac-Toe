@@ -123,11 +123,13 @@ function ScreenController() {
     let secondPlayerName
     let game;
     const newGameBtn = document.getElementById("new-game")
-    const modal = document.getElementById("modal")
+    const modal = document.getElementById("input-modal")
     const form = document.getElementById("form")
     const cancelBtn = document.getElementById("cancel")
     const playerTurnDiv = document.querySelector('.turn');
-    const boardDiv = document.querySelector('.board');
+    const boardContainer = document.querySelector(".coded-board-container")
+    const boardDiv = document.createElement("div")
+    boardDiv.className = "coded-board"
 
 
     newGameBtn.addEventListener("click", () => {
@@ -155,6 +157,7 @@ function ScreenController() {
     })
 
     const updateScreen = function () {
+        boardContainer.appendChild(boardDiv)
         boardDiv.textContent = ""
         const board = game.board.getBoard()
         const activePlayer = game.getActivePlayer()
@@ -163,15 +166,17 @@ function ScreenController() {
         // render the board
         for (let i = 0; i < board.length; i++) {
             const row = document.createElement("div")
+            row.className = "row"
             boardDiv.appendChild(row)
             for (let j = 0; j < board[i].length; j++) {
                 const square = document.createElement("button")
                 square.dataset.row = i
                 square.dataset.column = j;
-                square.textContent = board[i][j]
+                square.textContent = board[i][j];
                 row.appendChild(square)
             }
         }
+
     }
 
     function handleBoardClicks(event) {

@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Anta&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Anta&family=Jacquarda+Bastarda+9&family=Permanent+Marker&display=swap');
+
+body {
+    font-family: "Anta", sans-serif;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+
+}
+
+.header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #F9F7F7;
+    border: 1px solid black;
+}
+
+h1 {
+    font-size: 2.5rem;
+}
+
+.top-buttons {
+    display: flex;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.top-buttons button {
+    font-family: "Anta", sans-serif;
+    font-size: 1.2rem;
+    background-image: linear-gradient(45deg, #3F72AF, #DBE2EF);
+    padding: 0.5em 2em;
+    border-radius: 65px;
+    box-shadow: 1px 1px 10px #112D4E;
+
+}
+
+.top-buttons button:hover {
+    background-image: linear-gradient(-45deg, #3F72AF, #DBE2EF);
+    box-shadow: 0 12px 24px rgba(128, 128, 128, 0.1);
+}
+
+
+.top-buttons button:hover .text {
+    background-image: linear-gradient(-45deg, #3F72AF, #DBE2EF);
+}
+
+form {
+    background-color: #BDD2B6;
+    border: 1px solid black;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 300px;
+    width: 300px;
+    padding: 20px;
+}
+
+h2 {
+    text-align: center;
+}
+
+#first-player-input {
+    display: flex;
+    justify-content: space-between;
+}
+
+#second-player-input {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bottom-buttons {
+    display: flex;
+    justify-content: space-around;
+}
+
+.bottom-buttons button {
+    font-family: "Anta", sans-serif;
+    font-size: 1rem;
+    background-image: linear-gradient(45deg, #EEE9DA, #93BFCF);
+    padding: 0.5em 2em;
+    border-radius: 65px;
+    box-shadow: 1px 1px 10px #112D4E;
+
+}
+
+.bottom-buttons button:hover {
+    background-image: linear-gradient(-45deg, #BDCDD6, #6096B4);
+    box-shadow: 0 12px 24px rgba(128, 128, 128, 0.1);
+}
+
+.coded-board-container {
+    background-color: #EAC7C7;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.coded-board {
+    display: flex;
+    flex-direction: column;
+}
+
+.row {
+    display: flex;
+}
+
+.coded-board button {
+    font-family: "Permanent Marker", sans-serif;
+    background-color: #444F5A;
+    color: #FDFDFD;
+    font-size: 2rem;
+    height: 150px;
+    width: 150px;
+}
+
+.coded-board button:hover {
+    background-color: #FDFDFD;
+    color: #444F5A;
+}
