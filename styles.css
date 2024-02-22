@@ -93,6 +93,15 @@ h2 {
     box-shadow: 0 12px 24px rgba(128, 128, 128, 0.1);
 }
 
+.players {
+    display: flex;
+    justify-content: space-around;
+    padding-top: 20px;
+    font-size: 1.5rem;
+    background-color: #EAC7C7;
+
+}
+
 .coded-board-container {
     background-color: #EAC7C7;
     height: 100vh;
@@ -123,4 +132,8 @@ h2 {
 .coded-board button:hover {
     background-color: #FDFDFD;
     color: #444F5A;
+}
+
+.turn {
+    padding-bottom: 50px;
 }

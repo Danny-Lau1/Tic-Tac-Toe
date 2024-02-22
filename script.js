@@ -1,5 +1,5 @@
 const GameBoard = (function () {
-    const board = [
+    let board = [
         ['', '', ''], ['', '', ''], ['', '', '']
     ];
 
@@ -22,8 +22,15 @@ const GameBoard = (function () {
         console.log(board)
     }
 
+    const resetBoard = () => {
+        board = [
+            ['', '', ''], ['', '', ''], ['', '', '']
+        ];
+        return board
+    }
 
-    return { getBoard, makeMove, printBoard };
+
+    return { getBoard, makeMove, printBoard, resetBoard };
 })()
 
 function gameController(playerOne, playerTwo) {
@@ -44,6 +51,10 @@ function gameController(playerOne, playerTwo) {
 
     let activePlayer = players[0]
 
+    const getPlayers = () => {
+        return players
+    }
+
     const switchPlayerTurn = () => {
         if (activePlayer === players[0]) {
             activePlayer = players[1]
@@ -51,6 +62,11 @@ function gameController(playerOne, playerTwo) {
             activePlayer = players[0]
         }
     }
+
+    const resetPlayers = () => {
+        activePlayer = players[0]
+    }
+
     const getActivePlayer = () => {
         console.log(`It is ${activePlayer.name}'s turn.`)
         return activePlayer
@@ -115,7 +131,7 @@ function gameController(playerOne, playerTwo) {
         console.log("we have a tie")
         return true
     }
-    return { board, getActivePlayer, playRound }
+    return { board, getActivePlayer, playRound, resetPlayers, getPlayers }
 }
 
 function ScreenController() {
@@ -123,10 +139,13 @@ function ScreenController() {
     let secondPlayerName
     let game;
     const newGameBtn = document.getElementById("new-game")
+    const resetBtn = document.getElementById("reset")
     const modal = document.getElementById("input-modal")
     const form = document.getElementById("form")
     const cancelBtn = document.getElementById("cancel")
     const playerTurnDiv = document.querySelector('.turn');
+    const playerOneTitle = document.getElementById("player-one")
+    const playerTwoTitle = document.getElementById("player-two")
     const boardContainer = document.querySelector(".coded-board-container")
     const boardDiv = document.createElement("div")
     boardDiv.className = "coded-board"
@@ -140,15 +159,33 @@ function ScreenController() {
         modal.close()
     })
 
+    resetBtn.addEventListener("click", resetGame)
+
+    function resetGame() {
+        if (!game) {
+            return
+        }
+        game.board.resetBoard()
+        game.resetPlayers()
+        updateScreen()
+    }
+
+
+
     function getNames(event) {
         event.preventDefault()
         firstPlayerName = document.getElementById("first-player-name").value
         secondPlayerName = document.getElementById("second-player-name").value
-        modal.close()
-
         if (firstPlayerName && secondPlayerName) {
             game = gameController(firstPlayerName, secondPlayerName);
+            resetGame();
             updateScreen(); // Update the screen once the game is created
+            form.reset()
+            modal.close()
+
+        } else {
+            // Handle the case where the user cancels or doesn't input valid names
+            modal.close();
         }
     }
 
@@ -161,6 +198,10 @@ function ScreenController() {
         boardDiv.textContent = ""
         const board = game.board.getBoard()
         const activePlayer = game.getActivePlayer()
+        playerNames = game.getPlayers()
+        playerOneTitle.textContent = `Player 1: ${playerNames[0].name} | Piece: X`
+        playerTwoTitle.textContent = `Player 2: ${playerNames[1].name} | Piece O`
+
         playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
 
         // render the board
