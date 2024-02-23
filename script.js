@@ -36,6 +36,9 @@ const GameBoard = (function () {
 function gameController(playerOne, playerTwo) {
     playerOneName = playerOne
     playerTwoName = playerTwo
+    let isThereWinner = false
+    let isThereTie = false
+    let winner = null
     const board = GameBoard
 
     const players = [
@@ -67,6 +70,12 @@ function gameController(playerOne, playerTwo) {
         activePlayer = players[0]
     }
 
+    const resetWinner = () => {
+        isThereWinner = false
+        isThereTie = false
+        winner = null
+    }
+
     const getActivePlayer = () => {
         console.log(`It is ${activePlayer.name}'s turn.`)
         return activePlayer
@@ -77,10 +86,6 @@ function gameController(playerOne, playerTwo) {
     }
 
     const playRound = (row, column) => {
-        let tie = false
-        let winner = false
-
-
         getActivePlayer()
         printRound()
 
@@ -92,9 +97,13 @@ function gameController(playerOne, playerTwo) {
             return; // leaves the playRound function
         }
 
-        winner = checkForWinner(board.getBoard(), activePlayer.piece)
-        tie = checkForTie(board.getBoard())
+        isThereWinner = checkForWinner(board.getBoard(), activePlayer.piece)
+        if (isThereWinner) {
+            winner = activePlayer.name
+        }
+        isThereTie = checkForTie(board.getBoard())
         switchPlayerTurn()
+        return [isThereWinner, isThereTie, winner]
     }
 
     const checkForWinner = function (board, piece) {
@@ -131,7 +140,7 @@ function gameController(playerOne, playerTwo) {
         console.log("we have a tie")
         return true
     }
-    return { board, getActivePlayer, playRound, resetPlayers, getPlayers }
+    return { board, getActivePlayer, playRound, resetPlayers, getPlayers, resetWinner }
 }
 
 function ScreenController() {
@@ -141,6 +150,9 @@ function ScreenController() {
     const newGameBtn = document.getElementById("new-game")
     const resetBtn = document.getElementById("reset")
     const modal = document.getElementById("input-modal")
+    const results = document.getElementById("results")
+    const playAgainBtn = document.getElementById("play-again")
+    const resultsMessage = document.getElementById("result-message")
     const form = document.getElementById("form")
     const cancelBtn = document.getElementById("cancel")
     const playerTurnDiv = document.querySelector('.turn');
@@ -161,12 +173,15 @@ function ScreenController() {
 
     resetBtn.addEventListener("click", resetGame)
 
+
+
     function resetGame() {
         if (!game) {
             return
         }
         game.board.resetBoard()
         game.resetPlayers()
+        game.resetWinner()
         updateScreen()
     }
 
@@ -201,7 +216,6 @@ function ScreenController() {
         playerNames = game.getPlayers()
         playerOneTitle.textContent = `Player 1: ${playerNames[0].name} | Piece: X`
         playerTwoTitle.textContent = `Player 2: ${playerNames[1].name} | Piece O`
-
         playerTurnDiv.textContent = `${activePlayer.name}'s turn...`
 
         // render the board
@@ -220,11 +234,32 @@ function ScreenController() {
 
     }
 
+    function showResults(winnerOrLoser) {
+        // winnerOrLoser[0] is winner status, winnerOrLoser[1] is tie status, winnerOrLoser[2] is the winner name
+        results.showModal()
+        if (winnerOrLoser[0]) {
+            resultsMessage.textContent = `The Winner is ${winnerOrLoser[2]}`
+        }
+        else {
+            resultsMessage.textContent = `We have a tie!`
+        }
+
+    }
+
+    playAgainBtn.addEventListener("click", () => {
+        results.close()
+        resetGame()
+    })
+
     function handleBoardClicks(event) {
         const clickedSquare = event.target
         const row = clickedSquare.dataset.row
         const column = clickedSquare.dataset.column
-        game.playRound(row, column)
+        const winnerOrTie = game.playRound(row, column)
+        if (winnerOrTie[0] === true || winnerOrTie[1] === true) {
+            console.log(winnerOrTie)
+            showResults(winnerOrTie)
+        }
         updateScreen()
     }
     boardDiv.addEventListener("click", handleBoardClicks)
