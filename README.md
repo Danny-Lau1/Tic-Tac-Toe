@@ -1,5 +1,7 @@
 # Tic Tac Toe!
 
+## Demo HERE: [Tic Tac Toe] (https://danny-lau1.github.io/tic-tac-toe/)
+
 ### I built a tic-tac-toe game between two players using vanilla JS, html, and CSS
 
 #### Things I Learned
